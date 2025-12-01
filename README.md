@@ -1,24 +1,60 @@
-# sl-gt4py
+# semi-lagrangian-advection
 
-Semi-Lagrangian advection schemes with python and DaCe
+Semi-Lagrangian advection schemes in plain python, DaCe and Jax.
+
+
+## Semi-Lagragian implementation in python, Jax and DaCe
+
+- [sl_dace](./src/sl_dace): point-wise semi-lagrangian in DaCe
+  - [interpolation](./src/sl_dace/interpolation/):
+    - [interpolation_2d](./src/sl_dace/interpolation/interpolation_2d.py) : 2d linear interpolation for classical SL
+    - [flux_integral](./src/sl_dace/interpolation/flux_integral.py) : flux integrals along the trajectory for FFSL
+  
+  - [stencils](./src/sl_dace/stencils/):
+      - [ppm.py](./src/sl_dace/stencils/ppm.py) : ppm reconstruction and limiter 
+      - [ffsl.py](./src/sl_dace/stencils/ffsl.py) : stencils for 1d FFSL
+      - [dep_search_1d.py](./src/sl_dace/stencils/dep_search_1d.py) : depature search for classical SL
+- [sl_jax](./src/sl_jax): point-wise semi-lagrangian in Jax,
+- [sl_python](./src/sl_python): raw python version (no performance).
+
+Functional tests:
+- Uniform advection on a plate :
+
+```bash
+# setup precision (by default double)
+export PRECISION = double | simple
+
+# run tests
+uv run python test/functional/test_uniform.py
+```
+- Blossey shear test on a plate :
+
+```bash
+# setup precision (by default double)
+export PRECISION = double | simple
+
+# run tests
+uv run python test/functional/test_uniform.py
+```  
 
 ## Setup
 
 The project dependencies are managed with uv
 
-```bash
-    uv init                     # init project
-    uv venv                     # create virtual environment
-    source .venv/bin/activate   # activate virtual environment
-    uv sync                     # load and synchronize project dependencies
-```
-
-If you don't have uv, it can be downloaded from :
+To install uv :
 
 ```bash
     curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
+To create a virtual environment :
+
+```bash
+    uv init                     # init project
+    uv venv --python 3.12                     # create virtual environment
+    source .venv/bin/activate   # activate virtual environment
+    uv sync                     # load and synchronize project dependencies
+```
 
 ## sl_python
 
@@ -26,14 +62,7 @@ sl_python implements the classical sl scheme in 2d.
 
 ## sl_dace
 
-- **interpolation/**
-  - interpolation_2d.py : 2d linear interpolation for classical SL
-  - flux_integral.py : flux integrals along the trajectory for FFSL
-  
-- **stencils/**
-  - ppm.py : ppm reconstruction and limiter 
-  - ffsl.py : stencils for 1d FFSL
-  - dep_search_1d.py : depature search for classical SL
+
 
 - **utils/**
   - typingx.py
@@ -41,8 +70,7 @@ sl_python implements the classical sl scheme in 2d.
   Set precision 
 
    ```bash
-   # setup precision (by default double)
-   export PRECISION = double | simple  
+   
    ```
 
   - **dims.py/**
@@ -53,41 +81,18 @@ sl_python implements the classical sl scheme in 2d.
     To define a field on Half-Level : dtype_float[I, J, K + 1]
   
 
-- ffsl_x.py / ffsl_y.py : ffsl 1d orchestration
-- (WIP) ffsl_xy.py : ffsl 2d with swift splitting 
-- elarche.py : departure search for classical SL
-- (WIP) sl_init.py : SETTLS or NESC init orchestration
-- sl_xy.py : classical SL orchestration
-- (WIP) sl_driver.py : driver for full sl or ffsl schemes in dace
-
-## tests
-
-### unit
-
-Tests are build using pytests.
-All required test objects (grids, dimensions, backends, etc) are implemented as fixtures in conftest.py
-
-To run the tests :
-
-```bash
-    pytest tests/
-```
-
-### functional
-
-All tests run on python or dace execution mode.
-
-  - test_blossey.py : implements blossey 2d advection test on a plate
-  - test_one_step.py : implements 1 step run for an advection scheme
-  - test_uniform.py : implements uniform velocity advection
-
 ## Build the doc 
 
 ```bash
    uv run sphinx-autobuild -M html docs/ docbuild/
 ```
 
-## Autodiff experiments
+## WIP
 
-- branche **autodiff** : schéma ffsl auto-différentiable
+- ffsl_x.py / ffsl_y.py : ffsl 1d orchestration
+- (WIP) ffsl_xy.py : ffsl 2d with swift splitting 
+- elarche.py : departure search for classical SL
+- (WIP) sl_init.py : SETTLS or NESC init orchestration
+- sl_xy.py : classical SL orchestration
+- (WIP) sl_driver.py : driver for full sl or ffsl schemes in dace
 
