@@ -37,8 +37,12 @@ from sl_jax.reconstruction import (
     ppm_reconstruction_1d,
     ppm_reconstruction_2d,
     ffsl_convolution_1d,
+    ffsl_convolution_1d_differentiable,
     ffsl_reconstruction_2d,
     convolution_weights,
+    apply_van_leer_limiter,
+    apply_monotonicity_limiter,
+    sigmoid_weight,
 )
 
 __all__ = [
@@ -68,6 +72,12 @@ __all__ = [
     "ppm_reconstruction_1d",
     "ppm_reconstruction_2d",
     "ffsl_convolution_1d",
+    "ffsl_convolution_1d_differentiable",
     "ffsl_reconstruction_2d",
     "convolution_weights",
+    # Limiters
+    "apply_van_leer_limiter",
+    "apply_monotonicity_limiter",
+    # Utilities
+    "sigmoid_weight",
 ]
