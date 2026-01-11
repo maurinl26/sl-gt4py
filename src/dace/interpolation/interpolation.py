@@ -1,13 +1,12 @@
 import numpy as np
 import dace
 
-from sl_gt4py.gt4py_config import dtype
 from sl_python.boundaries import boundaries
 
-def p0_lin(l: dtype):
+def p0_lin(l: float):
     return 1 - l
 
-def p1_lin(l: dtype):
+def p1_lin(l: float):
     return l
 
 def interpolate_lin_2d(
